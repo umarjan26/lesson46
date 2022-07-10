@@ -1,6 +1,8 @@
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponseNotFound
+
+from webapp.forms import Task_form
 from webapp.models import Task, STATUS_CHOICES
 from django.urls import reverse
 
@@ -11,6 +13,10 @@ def index(request):
     context = {"tasks": task}
     return render(request, "index.html", context)
 
+# def index(request):
+#     guest = Guestbook.objects.order_by("-created_at").filter(status="active")
+#     context = {"guest": guest}
+#     return render(request, "index.html", context)
 
 
 def index_view(request, **kwargs):
@@ -31,3 +37,25 @@ def create_task(request):
 
         context = {"task": new_task}
         return redirect("index_view", pk=new_task.pk)
+
+
+
+
+def updates(request, pk):
+    record = get_object_or_404(Task, pk=pk)
+    if request.method == "GET":
+        task1 = Task_form(initial={
+            "task": record.task,
+            "description": record.description,
+            "status": record.status})
+        return render(request, "update.html", {"form": task1})
+    else:
+        form = Task_form(data=request.POST)
+        if form.is_valid():
+            record.task = form.cleaned_data.get("task")
+            record.description = form.cleaned_data.get("description")
+            record.status = form.cleaned_data.get("status")
+            record.save()
+            return redirect("index")
+        return render(request, "update.html", {"form": form})
+

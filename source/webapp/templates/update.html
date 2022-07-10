@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}обновить записи{% endblock %}
+
+{% block content %}
+    <h1>Update Record</h1>
+    <form action="" method="post">
+        {% include "forms.html" with button_text="обновить"%}
+    </form>
+{% endblock %}
