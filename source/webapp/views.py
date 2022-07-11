@@ -44,11 +44,11 @@ def create_task(request):
 def updates(request, pk):
     record = get_object_or_404(Task, pk=pk)
     if request.method == "GET":
-        task1 = Task_form(initial={
+        form = Task_form(initial={
             "task": record.task,
             "description": record.description,
             "status": record.status})
-        return render(request, "update.html", {"form": task1})
+        return render(request, "update.html", {"form": form, 'statuses': STATUS_CHOICES})
     else:
         form = Task_form(data=request.POST)
         if form.is_valid():
@@ -59,3 +59,12 @@ def updates(request, pk):
             return redirect("index")
         return render(request, "update.html", {"form": form})
 
+
+
+def delete(request, pk):
+    tasks = get_object_or_404(Task, pk=pk)
+    if request.method == "GET":
+        return render(request, "delete.html", {"tasks": tasks})
+    else:
+        tasks.delete()
+        return redirect("index")

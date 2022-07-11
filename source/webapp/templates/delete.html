@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}удалить запись{% endblock %}
+{% block content %}
+<form action="" method="post">
+ {% csrf_token %}
+    <h1>Вы уверены что хотите удалить  {{ tasks.task }} ?</h1>
+    <button class="btn btn-warning" type="submit">Да</button> </form>
+<a href="{% url "index" %}" class="btn btn-primary" type="button">Нет</a>
+{% endblock %}
+
+
